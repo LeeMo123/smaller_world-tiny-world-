@@ -17,7 +17,7 @@ After completing the above steps - do not MODIFY THE BIOME, WORLD SIZE options.
 ]] 
 
 author = "去码头整点薯条、不笑猫"
-version = "20260516"
+version = "20260530"
 
 api_version = 10
 priority = -100
