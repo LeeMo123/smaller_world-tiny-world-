@@ -76,37 +76,37 @@ if GLOBAL.KnownModIndex:IsModEnabled("workshop-2039181790") or GLOBAL.KnownModIn
         end)
 
         
-        AddLevelPreInitAny(function(level)
-            if level.location == "cave" and (level.id == "MINICAVE" or string.find(level.id, "MINI")) then
-                AddComponentPostInit("retrofitcavemap_anr", function(self)
-                    local old_onpostinit = self.OnPostInit
-                    function self:OnPostInit(...)
-                        if TheWorld.topology and TheWorld.topology.nodes then
-                            local has_maze_entrance = false
-                            local has_maze_grotto = false
+        -- AddLevelPreInitAny(function(level)
+        --     if level.location == "cave" and (level.id == "MINICAVE" or string.find(level.id, "MINI")) then
+        --         AddComponentPostInit("retrofitcavemap_anr", function(self)
+        --             local old_onpostinit = self.OnPostInit
+        --             function self:OnPostInit(...)
+        --                 if TheWorld.topology and TheWorld.topology.nodes then
+        --                     local has_maze_entrance = false
+        --                     local has_maze_grotto = false
                             
-                            for i, node in ipairs(TheWorld.topology.nodes) do
-                                if node.tags then
-                                    if table.contains(node.tags, "UMMazeEntranceGrotto") then
-                                        has_maze_entrance = true
-                                    end
-                                    if table.contains(node.tags, "UMMazeGrotto") then
-                                        has_maze_grotto = true
-                                    end
-                                end
-                            end
+        --                     for i, node in ipairs(TheWorld.topology.nodes) do
+        --                         if node.tags then
+        --                             if table.contains(node.tags, "UMMazeEntranceGrotto") then
+        --                                 has_maze_entrance = true
+        --                             end
+        --                             if table.contains(node.tags, "UMMazeGrotto") then
+        --                                 has_maze_grotto = true
+        --                             end
+        --                         end
+        --                     end
                             
-                            if not has_maze_entrance or not has_maze_grotto then
-                                print("Smaller World compatibility: Skipping retrofitcavemap_anr due to missing maze nodes")
-                                return
-                            end
-                        end
+        --                     if not has_maze_entrance or not has_maze_grotto then
+        --                         print("Smaller World compatibility: Skipping retrofitcavemap_anr due to missing maze nodes")
+        --                         return
+        --                     end
+        --                 end
                         
-                        return old_onpostinit(self, ...)
-                    end
-                end)
-            end
-        end)
+        --                 return old_onpostinit(self, ...)
+        --             end
+        --         end)
+        --     end
+        -- end)
     end
 end
 
