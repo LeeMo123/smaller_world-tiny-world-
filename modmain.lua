@@ -3,7 +3,8 @@
 
 -- ============================================
 -- 修复世界生成错误：防止 ChooseSetPieces 崩溃
--- 注意：必须在 AddSimPostInit 或稍后的时机执行，确保类已加载
+-- 注意：主修复已移至 modworldgenmain.lua（世界生成期间立即执行）
+-- 此处的 AddSimPostInit 版本仅作为服务端备用保护
 -- ============================================
 local level_class_loaded = false
 
@@ -82,4 +83,36 @@ AddSimPostInit(function()
     
     print("[Smaller World Mod] Fixed Level:ChooseSetPieces nil reference bug")
 end)
+
+
 -- ============================================
+
+if GLOBAL.KnownModIndex:IsModEnabled("workshop-3193922031")  then
+    AddComponentPostInit("retrofitcavemap_anr", function(self)
+        local old_onpostinit = self.OnPostInit
+        function self:OnPostInit(...)
+            if TheWorld.topology and TheWorld.topology.nodes then
+                local has_maze_entrance = false
+                local has_maze_grotto = false
+                
+                for i, node in ipairs(TheWorld.topology.nodes) do
+                    if node.tags then
+                        if table.contains(node.tags, "UMMazeEntranceGrotto") then
+                            has_maze_entrance = true
+                        end
+                        if table.contains(node.tags, "UMMazeGrotto") then
+                            has_maze_grotto = true
+                        end
+                    end
+                end
+                
+                if not has_maze_entrance or not has_maze_grotto then
+                    print("Smaller World compatibility: Skipping retrofitcavemap_anr due to missing maze nodes")
+                    return
+                end
+            end
+            
+            return old_onpostinit(self, ...)
+        end
+    end)
+end
